@@ -8,7 +8,6 @@ struct ProviderData {
     uint128 limit;          // In gwei
     uint128 share;          // In gwei
     uint256 paid;           // Total owing to provider = (unclaimedPerShare * share) - paid
-    uint256 buyout;         // Amount provider is willing to buy out from other parties
 }
 
 struct OperatorData {

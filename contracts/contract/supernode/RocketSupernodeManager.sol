@@ -35,7 +35,9 @@ contract RocketSupernodeManager is RocketBase {
     function deposit(address _supernodeAddress, bytes calldata _validatorPubkey, bytes calldata _validatorSignature, bytes32 _depositDataRoot, uint256 _salt, address _expectedMinipoolAddress) external payable onlyLatestContract("rocketSupernodeManager", address(this)) {
         // Perform the deposit through the supernode
         RocketSupernodeDelegate supernode = RocketSupernodeDelegate(_supernodeAddress);
-        supernode.deposit(msg.sender, _validatorPubkey, _validatorSignature, _depositDataRoot, _salt, _expectedMinipoolAddress);
+        // Construct final salt
+        uint256 finalSalt = uint256(keccak256(abi.encodePacked(addmod(uint160(msg.sender), _salt, uint256(-1)))));
+        supernode.deposit(msg.sender, _validatorPubkey, _validatorSignature, _depositDataRoot, finalSalt, _expectedMinipoolAddress);
         // Add the new minipool to the node operator's set
         AddressSetStorageInterface addressSetStorage = AddressSetStorageInterface(getContractAddress("addressSetStorage"));
         addressSetStorage.addItem(keccak256(abi.encodePacked("supernode.operator.minipool.index", msg.sender)), _expectedMinipoolAddress);

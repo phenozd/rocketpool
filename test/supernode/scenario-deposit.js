@@ -69,10 +69,19 @@ export async function deposit(supernodeAddress, txOptions, preUpdate = false) {
     const deployCode = contractBytecode + constructorArgs.substr(2);
     const salt = minipoolSalt++;
 
+    let augmentedSalt = web3.utils.toBN(salt);
+    augmentedSalt = augmentedSalt.add(web3.utils.toBN(txOptions.from));
+    const maxUint256 = web3.utils.toBN('2').pow(web3.utils.toBN('256')).sub(web3.utils.toBN('1'));
+    augmentedSalt = augmentedSalt.mod(maxUint256);
+
+    const finalSalt = web3.utils.soliditySha3(
+      {type:'uint256', value: augmentedSalt}
+    )
+
     // Calculate keccak(nodeAddress, salt)
     const nodeSalt = web3.utils.soliditySha3(
       {type: 'address', value: supernodeAddress},
-      {type: 'uint256', value: salt}
+      {type: 'uint256', value: finalSalt}
     )
 
     // Calculate hash of deploy code

@@ -80,6 +80,16 @@ contract RocketSupernodeDelegate is RocketSupernodeStorageLayout {
         rocketNodeDeposit.deposit{value : depositAmount}(minimumNodeFee, _validatorPubkey, _validatorSignature, _depositDataRoot, _salt, _expectedMinipoolAddress);
     }
 
+    // Sets the minimum node fee that is used when creating a minipool
+    function setMinimumNodeFee(uint256 _minimumNodeFee) external onlySupernodeOwner {
+        minimumNodeFee = _minimumNodeFee;
+    }
+
+    // Retrieves the minimum node fee as set by the supernode operator
+    function getMinimumNodeFee() external view returns (uint256) {
+        return minimumNodeFee;
+    }
+
     // Adds an actor to the set of actors associated with this supernode
     function addActor(address _actor) internal {
         if (!actorExists[_actor]) {
@@ -170,19 +180,9 @@ contract RocketSupernodeDelegate is RocketSupernodeStorageLayout {
         addActor(_provider);
     }
 
-    // Sets the amount of ETH position a provider is willing to buy from other providers
-    function setEthBuyoutLimit(uint256 _newLimit) external {
-        ethProviders[msg.sender].buyout = _newLimit;
-    }
-
     // Retrieves the current ETH deposit limit for a given provider
     function getEthLimit(address _provider) external view returns (uint256) {
         return uint256(ethProviders[_provider].limit).mul(shareBase);
-    }
-
-    // Retrieves the current ETH buyout limit for a given provider
-    function getEthBuyoutLimit(address _provider) external view returns (uint256) {
-        return ethProviders[_provider].buyout;
     }
 
     // Retrieves the current amount of ETH shares the given provider owns
@@ -219,19 +219,9 @@ contract RocketSupernodeDelegate is RocketSupernodeStorageLayout {
         addActor(_provider);
     }
 
-    // Sets the amount of RPL position a provider is willing to buy from other providers
-    function setRplBuyoutLimit(uint256 _newLimit) external {
-        rplProviders[msg.sender].buyout = _newLimit;
-    }
-
     // Retrieves the current RPL deposit limit for a given provider
     function getRplLimit(address _provider) external view returns (uint256) {
         return uint256(rplProviders[_provider].limit).mul(shareBase);
-    }
-
-    // Retrieves the current RPL buyout limit for a given provider
-    function getRplBuyoutLimit(address _provider) external view returns (uint256) {
-        return rplProviders[_provider].buyout;
     }
 
     // Retrieves the current amount of RPL shares the given provider owns
@@ -345,60 +335,6 @@ contract RocketSupernodeDelegate is RocketSupernodeStorageLayout {
         operators[nodeOperator].paidRpl = operators[nodeOperator].paidRpl.sub(nodeOperatorUnclaimedRplPerMinipool);
     }
 
-    function selloutEth(address _buyerAddress, uint256 _amount) external {
-        // Perform distribution and claim before the sellout
-        distributeEth();
-        _claimEth(msg.sender);
-        // Get data from storage
-        ProviderData memory seller = ethProviders[msg.sender];
-        ProviderData memory buyer = ethProviders[_buyerAddress];
-        // Check limits
-        uint128 numShares = uint128(_amount.div(shareBase));
-        require(_amount <= buyer.buyout, "Buyer buyout limit is too low");
-        require(buyer.limit >= uint256(buyer.share).add(numShares), "Exceeds buyer capital limit");
-        // Calculate where to take the rewards from
-        (uint256 supernodeEth, uint256 nodeOperatorEth, uint256 providerEth) = _getUnclaimedEth(_buyerAddress);
-        // From supernode rewards
-        uint256 runningAmount = _amount;
-        uint256 fromSupernodeEth = runningAmount;
-        if (runningAmount > supernodeEth) {
-            fromSupernodeEth = supernodeEth;
-            runningAmount -= supernodeEth;
-        } else {
-            runningAmount = 0;
-        }
-        // From node operator rewards
-        uint256 fromNodeOperatorEth = runningAmount;
-        if (runningAmount > nodeOperatorEth) {
-            fromNodeOperatorEth = nodeOperatorEth;
-            runningAmount -= nodeOperatorEth;
-        } else {
-            runningAmount = 0;
-        }
-        // Anything left from provider rewards
-        uint256 fromProviderEth = runningAmount;
-        if (runningAmount > providerEth) {
-            revert("Not enough unclaimed ETH to sellout that amount");
-        }
-        // Perform accounting
-        supernodeUnclaimedEth = supernodeUnclaimedEth.sub(fromSupernodeEth);
-        operators[_buyerAddress].paidEth = operators[_buyerAddress].paidEth.add(fromNodeOperatorEth);
-        buyer.buyout = buyer.buyout.sub(_amount);
-        uint256 paidDelta = uint256(numShares).mul(unclaimedEthPerShare).div(unclaimedBase);
-        buyer.paid = buyer.paid.add(paidDelta).add(fromProviderEth);
-        seller.paid = seller.paid.sub(paidDelta);
-        // TODO: SafeMath these uint128s
-        buyer.share = buyer.share + numShares;
-        seller.share = seller.share - numShares;
-        // Store results
-        ethProviders[msg.sender] = seller;
-        ethProviders[_buyerAddress] = buyer;
-        unclaimedEth = unclaimedEth.sub(_amount);
-        // Send ETH
-        (bool success,) = msg.sender.call{value : _amount}("");
-        require(success, "Withdraw failed");
-    }
-
     // Increases a capital providers number of shares by depositing ETH
     function depositEth() external payable {
         // Value must be non-zero and an integer division of 1 gwei
@@ -426,21 +362,6 @@ contract RocketSupernodeDelegate is RocketSupernodeStorageLayout {
         unclaimedEth = unclaimedEth.add(perShare.mul(totalEthShares));
     }
 
-    function sellShareEth(address _seller, uint256 _amount) external onlySupernodeOwner {
-        require(unallocatedEth >= _amount, "Insufficient unallocated ETH");
-        uint256 numShares = _amount.div(shareBase);
-        require(ethProviders[_seller].share > numShares, "Insufficient shares avaialble");
-        // Distribute ETH rewards
-        distributeEth();
-        // TODO: SafeMath this uint128
-        ethProviders[_seller].share = ethProviders[_seller].share - numShares;
-        ethProviders[_seller].paid = ethProviders[_seller].paid.sub(unclaimedEthPerShare);
-        unallocatedEth = unallocatedEth.sub(_amount);
-        // Send the ETH
-        (bool success,) = _seller.call{value : total}("");
-        require(success, "Transfer failed");
-    }
-
     // Withdraws distributed ETH, optionally distributing first
     function claimEth(bool _distribute) external {
         // Optionally, distribute
@@ -465,66 +386,6 @@ contract RocketSupernodeDelegate is RocketSupernodeStorageLayout {
         // Attempt to transfer the ETH
         (bool success,) = _actor.call{value : total}("");
         require(success, "Transfer failed");
-    }
-
-    function selloutRpl(address _buyerAddress, uint256 _amount) external {
-        // Get contracts
-        RocketTokenRPLInterface rocketTokenRPL = RocketTokenRPLInterface(getContractAddress("rocketTokenRPL"));
-        // Perform distribution and claim before the sellout
-        distributeRpl();
-        _claimRpl(msg.sender);
-        // Get data from storage
-        ProviderData memory seller = rplProviders[msg.sender];
-        ProviderData memory buyer = rplProviders[_buyerAddress];
-        // Check limits
-        uint128 numShares = uint128(_amount.div(shareBase));
-        require(_amount <= buyer.buyout, "Buyer buyout limit is too low");
-        require(buyer.limit >= uint256(buyer.share).add(numShares), "Exceeds buyer capital limit");
-        // Calculate where to take the rewards from
-        uint256 fromSupernodeRpl;
-        uint256 fromNodeOperatorRpl;
-        uint256 fromProviderRpl;
-        {
-            (uint256 supernodeRpl, uint256 nodeOperatorRpl, uint256 providerRpl) = _getUnclaimedRpl(_buyerAddress);
-            // From supernode rewards
-            uint256 runningAmount = _amount;
-            fromSupernodeRpl = runningAmount;
-            if (runningAmount > supernodeRpl) {
-                fromSupernodeRpl = supernodeRpl;
-                runningAmount -= supernodeRpl;
-            } else {
-                runningAmount = 0;
-            }
-            // From node operator rewards
-            fromNodeOperatorRpl = runningAmount;
-            if (runningAmount > nodeOperatorRpl) {
-                fromNodeOperatorRpl = nodeOperatorRpl;
-                runningAmount -= nodeOperatorRpl;
-            } else {
-                runningAmount = 0;
-            }
-            // Anything left from provider rewards
-            fromProviderRpl = runningAmount;
-            if (runningAmount > providerRpl) {
-                revert("Not enough unclaimed RPL to sellout that amount");
-            }
-        }
-        // Perform accounting
-        supernodeUnclaimedRpl = supernodeUnclaimedRpl.sub(fromSupernodeRpl);
-        operators[_buyerAddress].paidRpl = operators[_buyerAddress].paidRpl.add(fromNodeOperatorRpl);
-        buyer.buyout = buyer.buyout.sub(_amount);
-        uint256 paidDelta = uint256(numShares).mul(unclaimedRplPerShare).div(unclaimedBase);
-        buyer.paid = buyer.paid.add(paidDelta).add(fromProviderRpl);
-        seller.paid = seller.paid.sub(paidDelta);
-        // TODO: SafeMath these uint128s
-        buyer.share = buyer.share + numShares;
-        seller.share = seller.share - numShares;
-        // Store results
-        rplProviders[msg.sender] = seller;
-        rplProviders[_buyerAddress] = buyer;
-        // Send RPL
-        rocketTokenRPL.transfer(msg.sender, _amount);
-        unclaimedRpl = unclaimedRpl.sub(_amount);
     }
 
     // Increases a capital providers number of shares by depositing RPL
