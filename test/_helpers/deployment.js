@@ -48,6 +48,7 @@ const contracts = {
     rocketMinipoolQueue:                      artifacts.require('RocketMinipoolQueueOld.sol'),
     rocketMinipoolStatus:                     artifacts.require('RocketMinipoolStatus.sol'),
     rocketMinipoolPenalty:                    artifacts.require('RocketMinipoolPenalty.sol'),
+    rocketMinipoolVerifier:                   artifacts.require('RocketMinipoolVerifier.sol'),
     // Network
     rocketNetworkBalances:                    artifacts.require('RocketNetworkBalancesOld.sol'),
     rocketNetworkFees:                        artifacts.require('RocketNetworkFeesOld.sol'),
@@ -296,6 +297,7 @@ export async function deployRocketPool() {
 
                     // All other contracts - pass storage address
                     default:
+                        console.log('Deploying ' + contract);
                         instance = await contracts[contract].new(rocketStorageInstance.address);
                         contracts[contract].setAsDeployed(instance);
                         // Slight hack to allow gas optimisation using immutable addresses for non-upgradable contracts

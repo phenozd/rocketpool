@@ -1,7 +1,13 @@
-import { RocketMinipoolManager, RocketDAOProtocolSettingsMinipool } from '../_utils/artifacts';
+import {
+    RocketMinipoolManager,
+    RocketDAOProtocolSettingsMinipool,
+    RocketMinipoolVerifier,
+    RocketStorage,
+} from '../_utils/artifacts';
 import { getValidatorSignature, getDepositDataRoot, getValidatorPubkey } from '../_utils/beacon';
 import { assertBN } from '../_helpers/bn';
 import { minipoolStates } from '../_helpers/minipool';
+import { generateBeaconStateProofForStake } from '../_helpers/beaconstate';
 
 
 // Stake a minipool
@@ -9,8 +15,12 @@ export async function stake(minipool, withdrawalCredentials, txOptions, validato
     // Load contracts
     const [
         rocketMinipoolManager,
+        rocketMinipoolVerifier,
+        rocketStorage
     ] = await Promise.all([
         RocketMinipoolManager.deployed(),
+        RocketMinipoolVerifier.deployed(),
+        RocketStorage.deployed()
     ]);
 
     // Get minipool validator pubkey
@@ -45,8 +55,13 @@ export async function stake(minipool, withdrawalCredentials, txOptions, validato
         rocketMinipoolManager.getMinipoolByPubkey.call(validatorPubkey),
     ]);
 
+    // Generate a fake beacon state root and proof and add to mock beacon state root set
+    const proof = generateBeaconStateProofForStake(validatorPubkey, withdrawalCredentials, 1)
+    const guardian = await rocketStorage.getGuardian();
+    await rocketMinipoolVerifier.addBeaconStateRoot(proof.beaconStateRoot, {from: guardian});
+
     // Stake
-    await minipool.stake(depositData.signature, depositDataRoot, txOptions);
+    await minipool.stake(depositData.signature, depositDataRoot, proof, txOptions);
 
     // Get updated minipool details & minipool by validator pubkey
     let [details2, validatorMinipool2] = await Promise.all([

@@ -25,6 +25,7 @@ export const RocketMinipoolQueueOld = artifacts.require('RocketMinipoolQueueOld.
 export const RocketMinipoolStatus = artifacts.require('RocketMinipoolStatus.sol');
 export const RocketMinipoolPenalty = artifacts.require('RocketMinipoolPenalty.sol');
 export const RocketMinipoolManager = artifacts.require('RocketMinipoolManager.sol');
+export const RocketMinipoolVerifier = artifacts.require('RocketMinipoolVerifier.sol');
 export const RocketMinipoolManagerOld = artifacts.require('RocketMinipoolManagerOld.sol');
 export const RocketNetworkBalancesOld = artifacts.require('RocketNetworkBalancesOld.sol');
 export const RocketNetworkBalances = artifacts.require('RocketNetworkBalances.sol');

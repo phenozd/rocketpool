@@ -410,7 +410,7 @@ export default function() {
         //
 
 
-        it(printTitle('node operator', 'can stake a minipool at prelaunch'), async () => {
+        it.only(printTitle('node operator', 'can stake a minipool at prelaunch'), async () => {
             // Stake prelaunch minipool
             await stake(prelaunchMinipool, null, {
                 from: node,

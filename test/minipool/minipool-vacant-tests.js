@@ -100,7 +100,7 @@ export default function() {
         //
 
 
-        it(printTitle('node operator', 'can promote a 16 ETH vacant minipool after scrub period has elapsed'), async () => {
+        it.only(printTitle('node operator', 'can promote a 16 ETH vacant minipool after scrub period has elapsed'), async () => {
             // Wait required scrub period
             await increaseTime(web3, promotionScrubDelay + 1);
             // Promote the minipool

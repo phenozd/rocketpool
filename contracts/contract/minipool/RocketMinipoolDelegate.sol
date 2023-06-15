@@ -1,5 +1,6 @@
 // SPDX-License-Identifier: GPL-3.0-only
 pragma solidity 0.7.6;
+pragma abicoder v2;
 
 import "@openzeppelin/contracts/math/SafeMath.sol";
 
@@ -21,13 +22,16 @@ import "../../types/MinipoolDeposit.sol";
 import "../../types/MinipoolStatus.sol";
 import "../../interface/node/RocketNodeDepositInterface.sol";
 import "../../interface/minipool/RocketMinipoolBondReducerInterface.sol";
+import "../../interface/minipool/RocketMinipoolVerifier.sol";
+import "../../types/StakeProof.sol";
+import "../../types/PromotionProof.sol";
 
 /// @notice Provides the logic for each individual minipool in the Rocket Pool network
 /// @dev Minipools exclusively DELEGATECALL into this contract it is never called directly
 contract RocketMinipoolDelegate is RocketMinipoolStorageLayout, RocketMinipoolInterface {
 
     // Constants
-    uint8 public constant override version = 3;                   // Used to identify which delegate contract each minipool is using
+    uint8 public constant override version = 4;                   // Used to identify which delegate contract each minipool is using
     uint256 constant calcBase = 1 ether;                          // Fixed point arithmetic uses this for value for precision
     uint256 constant legacyPrelaunchAmount = 16 ether;            // The amount of ETH initially deposited when minipool is created (for legacy minipools)
 
@@ -41,7 +45,7 @@ contract RocketMinipoolDelegate is RocketMinipoolStorageLayout, RocketMinipoolIn
     event MinipoolScrubbed(uint256 time);
     event MinipoolPrestaked(bytes validatorPubkey, bytes validatorSignature, bytes32 depositDataRoot, uint256 amount, bytes withdrawalCredentials, uint256 time);
     event MinipoolPromoted(uint256 time);
-    event MinipoolVacancyPrepared(uint256 bondAmount, uint256 currentBalance, uint256 time);
+    event MinipoolVacancyPrepared(uint256 bondAmount, uint256 time);
     event EtherDeposited(address indexed from, uint256 amount, uint256 time);
     event EtherWithdrawn(address indexed to, uint256 amount, uint256 time);
     event EtherWithdrawalProcessed(address indexed executed, uint256 nodeAmount, uint256 userAmount, uint256 totalBalance, uint256 time);
@@ -216,20 +220,6 @@ contract RocketMinipoolDelegate is RocketMinipoolStorageLayout, RocketMinipoolIn
         _slash();
     }
 
-    /// @notice Returns true when `stake()` can be called by node operator taking into consideration the scrub period
-    function canStake() override external view onlyInitialised returns (bool) {
-        // Check status
-        if (status != MinipoolStatus.Prelaunch) {
-            return false;
-        }
-        // Get contracts
-        RocketDAONodeTrustedSettingsMinipoolInterface rocketDAONodeTrustedSettingsMinipool = RocketDAONodeTrustedSettingsMinipoolInterface(getContractAddress("rocketDAONodeTrustedSettingsMinipool"));
-        // Get scrub period
-        uint256 scrubPeriod = rocketDAONodeTrustedSettingsMinipool.getScrubPeriod();
-        // Check if we have been in prelaunch status for long enough
-        return block.timestamp > statusTime + scrubPeriod;
-    }
-
     /// @notice Returns true when `promote()` can be called by node operator taking into consideration the scrub period
     function canPromote() override external view onlyInitialised returns (bool) {
         // Check status
@@ -247,23 +237,23 @@ contract RocketMinipoolDelegate is RocketMinipoolStorageLayout, RocketMinipoolIn
     /// @notice Progress the minipool to staking, sending its ETH deposit to the deposit contract. Only accepts calls from the minipool owner (node) while in prelaunch and once scrub period has ended
     /// @param _validatorSignature A signature over the deposit message object
     /// @param _depositDataRoot The hash tree root of the deposit data object
-    function stake(bytes calldata _validatorSignature, bytes32 _depositDataRoot) override external onlyMinipoolOwner(msg.sender) onlyInitialised {
+    /// @param _proof A valid beacon state proof
+    function stake(bytes calldata _validatorSignature, bytes32 _depositDataRoot, StakeProof calldata _proof) override external onlyMinipoolOwner(msg.sender) onlyInitialised {
+        require(status == MinipoolStatus.Prelaunch, "The minipool can only begin staking while in prelaunch");
+        require(!vacant, "Cannot stake a vacant minipool");
         // Get contracts
         RocketDAOProtocolSettingsMinipoolInterface rocketDAOProtocolSettingsMinipool = RocketDAOProtocolSettingsMinipoolInterface(getContractAddress("rocketDAOProtocolSettingsMinipool"));
+        DepositInterface casperDeposit = DepositInterface(getContractAddress("casperDeposit"));
+        RocketMinipoolManagerInterface rocketMinipoolManager = RocketMinipoolManagerInterface(getContractAddress("rocketMinipoolManager"));
+        // Retrieve validator pubkey from storage
+        bytes memory validatorPubkey = rocketMinipoolManager.getMinipoolPubkey(address(this));
         {
-            // Get scrub period
-            RocketDAONodeTrustedSettingsMinipoolInterface rocketDAONodeTrustedSettingsMinipool = RocketDAONodeTrustedSettingsMinipoolInterface(getContractAddress("rocketDAONodeTrustedSettingsMinipool"));
-            uint256 scrubPeriod = rocketDAONodeTrustedSettingsMinipool.getScrubPeriod();
-            // Check current status
-            require(status == MinipoolStatus.Prelaunch, "The minipool can only begin staking while in prelaunch");
-            require(block.timestamp > statusTime + scrubPeriod, "Not enough time has passed to stake");
-            require(!vacant, "Cannot stake a vacant minipool");
+            // Verify the state proof for withdrawal credentials
+            RocketMinipoolVerifierInterface minipoolVerifier = RocketMinipoolVerifierInterface(getContractAddress("rocketMinipoolVerifier"));
+            require(minipoolVerifier.verifyStake(address(this), validatorPubkey, _proof), "Invalid proof");
         }
         // Progress to staking
         setStatus(MinipoolStatus.Staking);
-        // Load contracts
-        DepositInterface casperDeposit = DepositInterface(getContractAddress("casperDeposit"));
-        RocketMinipoolManagerInterface rocketMinipoolManager = RocketMinipoolManagerInterface(getContractAddress("rocketMinipoolManager"));
         // Get launch amount
         uint256 launchAmount = rocketDAOProtocolSettingsMinipool.getLaunchBalance();
         uint256 depositAmount;
@@ -275,8 +265,6 @@ contract RocketMinipoolDelegate is RocketMinipoolStorageLayout, RocketMinipoolIn
         }
         // Check minipool balance
         require(address(this).balance >= depositAmount, "Insufficient balance to begin staking");
-        // Retrieve validator pubkey from storage
-        bytes memory validatorPubkey = rocketMinipoolManager.getMinipoolPubkey(address(this));
         // Send staking deposit to casper
         casperDeposit.deposit{value : depositAmount}(validatorPubkey, rocketMinipoolManager.getMinipoolWithdrawalCredentials(address(this)), _validatorSignature, _depositDataRoot);
         // Increment node's number of staking minipools
@@ -285,8 +273,7 @@ contract RocketMinipoolDelegate is RocketMinipoolStorageLayout, RocketMinipoolIn
 
     /// @dev Sets the bond value and vacancy flag on this minipool
     /// @param _bondAmount The bond amount selected by the node operator
-    /// @param _currentBalance The current balance of the validator on the beaconchain (will be checked by oDAO and scrubbed if not correct)
-    function prepareVacancy(uint256 _bondAmount, uint256 _currentBalance) override external onlyLatestContract("rocketMinipoolManager", msg.sender) onlyInitialised {
+    function prepareVacancy(uint256 _bondAmount) override external onlyLatestContract("rocketMinipoolManager", msg.sender) onlyInitialised {
         // Check status
         require(status == MinipoolStatus.Initialised, "Must be in initialised status");
         // Sanity check that refund balance is zero
@@ -294,38 +281,44 @@ contract RocketMinipoolDelegate is RocketMinipoolStorageLayout, RocketMinipoolIn
         // Check balance
         RocketDAOProtocolSettingsMinipoolInterface rocketDAOProtocolSettingsMinipool = RocketDAOProtocolSettingsMinipoolInterface(getContractAddress("rocketDAOProtocolSettingsMinipool"));
         uint256 launchAmount = rocketDAOProtocolSettingsMinipool.getLaunchBalance();
-        require(_currentBalance >= launchAmount, "Balance is too low");
         // Store bond amount
         nodeDepositBalance = _bondAmount;
         // Calculate user amount from launch amount
         userDepositBalance = launchAmount.sub(nodeDepositBalance);
         // Flag as vacant
         vacant = true;
-        preMigrationBalance = _currentBalance;
-        // Refund the node whatever rewards they have accrued prior to becoming a RP validator
-        nodeRefundBalance = _currentBalance.sub(launchAmount);
         // Set status to preLaunch
         setStatus(MinipoolStatus.Prelaunch);
         // Emit event
-        emit MinipoolVacancyPrepared(_bondAmount, _currentBalance, block.timestamp);
+        emit MinipoolVacancyPrepared(_bondAmount, block.timestamp);
     }
 
     /// @dev Promotes this minipool to a complete minipool
-    function promote() override external onlyMinipoolOwner(msg.sender) onlyInitialised {
+    /// @param _proof A valid beacon state proof
+    function promote(PromotionProof calldata _proof) override external onlyMinipoolOwner(msg.sender) onlyInitialised {
         // Check status
         require(status == MinipoolStatus.Prelaunch, "The minipool can only promote while in prelaunch");
         require(vacant, "Cannot promote a non-vacant minipool");
         // Get contracts
         RocketDAONodeTrustedSettingsMinipoolInterface rocketDAONodeTrustedSettingsMinipool = RocketDAONodeTrustedSettingsMinipoolInterface(getContractAddress("rocketDAONodeTrustedSettingsMinipool"));
+        RocketMinipoolManagerInterface rocketMinipoolManager = RocketMinipoolManagerInterface(getContractAddress("rocketMinipoolManager"));
+        RocketDAOProtocolSettingsMinipoolInterface rocketDAOProtocolSettingsMinipool = RocketDAOProtocolSettingsMinipoolInterface(getContractAddress("rocketDAOProtocolSettingsMinipool"));
+        // Retrieve validator pubkey from storage
+        bytes memory validatorPubkey = rocketMinipoolManager.getMinipoolPubkey(address(this));
+        // Verify the state proof for withdrawal credentials
+        RocketMinipoolVerifierInterface minipoolVerifier = RocketMinipoolVerifierInterface(getContractAddress("rocketMinipoolVerifier"));
+        require(minipoolVerifier.verifyPromotion(address(this), validatorPubkey, _proof), "Invalid proof");
+        // Ensure effective balance is valid
+        uint256 launchAmount = rocketDAOProtocolSettingsMinipool.getLaunchBalance();
+        uint256 effectiveBalance = uint256(_proof.effectiveBalance) * 1 gwei;
+        require(effectiveBalance >= launchAmount, "Balance is too low");
+        preMigrationBalance = effectiveBalance;
+        nodeRefundBalance = effectiveBalance.sub(launchAmount);
         // Clear vacant flag
         vacant = false;
-        // Check scrub period
-        uint256 scrubPeriod = rocketDAONodeTrustedSettingsMinipool.getPromotionScrubPeriod();
-        require(block.timestamp > statusTime + scrubPeriod, "Not enough time has passed to promote");
         // Progress to staking
         setStatus(MinipoolStatus.Staking);
         // Increment node's number of staking minipools
-        RocketMinipoolManagerInterface rocketMinipoolManager = RocketMinipoolManagerInterface(getContractAddress("rocketMinipoolManager"));
         rocketMinipoolManager.incrementNodeStakingMinipoolCount(nodeAddress);
         // Set deposit assigned time
         userDepositAssignedTime = block.timestamp;
@@ -594,48 +587,6 @@ contract RocketMinipoolDelegate is RocketMinipoolStorageLayout, RocketMinipoolIn
         userDepositBalance = 0;
         userDepositBalanceLegacy = 0;
         userDepositAssignedTime = 0;
-    }
-
-    /// @notice Can be called by trusted nodes to scrub this minipool if its withdrawal credentials are not set correctly
-    function voteScrub() override external onlyInitialised {
-        // Check current status
-        require(status == MinipoolStatus.Prelaunch, "The minipool can only be scrubbed while in prelaunch");
-        // Get contracts
-        RocketDAONodeTrustedInterface rocketDAONode = RocketDAONodeTrustedInterface(getContractAddress("rocketDAONodeTrusted"));
-        RocketDAONodeTrustedSettingsMinipoolInterface rocketDAONodeTrustedSettingsMinipool = RocketDAONodeTrustedSettingsMinipoolInterface(getContractAddress("rocketDAONodeTrustedSettingsMinipool"));
-        // Must be a trusted member
-        require(rocketDAONode.getMemberIsValid(msg.sender), "Not a trusted member");
-        // Can only vote once
-        require(!memberScrubVotes[msg.sender], "Member has already voted to scrub");
-        memberScrubVotes[msg.sender] = true;
-        // Emit event
-        emit ScrubVoted(msg.sender, block.timestamp);
-        // Check if required quorum has voted
-        uint256 quorum = rocketDAONode.getMemberCount().mul(rocketDAONodeTrustedSettingsMinipool.getScrubQuorum()).div(calcBase);
-        if (totalScrubVotes.add(1) > quorum) {
-            // Slash RPL equal to minimum stake amount (if enabled)
-            if (!vacant && rocketDAONodeTrustedSettingsMinipool.getScrubPenaltyEnabled()){
-                RocketNodeStakingInterface rocketNodeStaking = RocketNodeStakingInterface(getContractAddress("rocketNodeStaking"));
-                RocketDAOProtocolSettingsNodeInterface rocketDAOProtocolSettingsNode = RocketDAOProtocolSettingsNodeInterface(getContractAddress("rocketDAOProtocolSettingsNode"));
-                RocketDAOProtocolSettingsMinipoolInterface rocketDAOProtocolSettingsMinipool = RocketDAOProtocolSettingsMinipoolInterface(getContractAddress("rocketDAOProtocolSettingsMinipool"));
-                uint256 launchAmount = rocketDAOProtocolSettingsMinipool.getLaunchBalance();
-                // Slash amount is minRplStake * userCapital
-                // In prelaunch userDepositBalance hasn't been set so we calculate it as 32 ETH - bond amount
-                rocketNodeStaking.slashRPL(
-                    nodeAddress,
-                        launchAmount.sub(nodeDepositBalance)
-                        .mul(rocketDAOProtocolSettingsNode.getMinimumPerMinipoolStake())
-                        .div(calcBase)
-                );
-            }
-            // Dissolve this minipool, recycling ETH back to deposit pool
-            _dissolve();
-            // Emit event
-            emit MinipoolScrubbed(block.timestamp);
-        } else {
-            // Increment total
-            totalScrubVotes = totalScrubVotes.add(1);
-        }
     }
 
     /// @notice Reduces the ETH bond amount and credits the owner the difference

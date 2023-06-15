@@ -1,3 +1,4 @@
+import { ethers } from 'ethers';
 import {
     RocketMinipoolDelegate,
     RocketMinipoolManager,
@@ -11,11 +12,12 @@ import {
     RocketMinipoolFactoryOld,
     RocketMinipoolManagerOld,
     RocketNodeStaking,
-    RocketNodeStakingOld,
+    RocketNodeStakingOld, RocketMinipoolVerifier,
 } from '../_utils/artifacts';
 import { getValidatorPubkey, getValidatorSignature, getDepositDataRoot } from '../_utils/beacon';
 import { upgradeExecuted } from '../_utils/upgrade';
 import { assertBN } from './bn';
+import { generateBeaconStateProofForPromotion, generateBeaconStateProofForStake } from './beaconstate';
 
 // Possible states that a proposal may be in
 export const minipoolStates = {
@@ -184,7 +186,7 @@ export async function createMinipoolWithBondAmount(bondAmount, txOptions, salt =
 
 
 // Create a vacant minipool
-export async function createVacantMinipool(bondAmount, txOptions, salt = null, currentBalance = '32'.ether, pubkey = null) {
+export async function createVacantMinipool(bondAmount, txOptions, salt = null, pubkey = null) {
     // Load contracts
     const [
         rocketMinipoolFactory,
@@ -209,7 +211,7 @@ export async function createVacantMinipool(bondAmount, txOptions, salt = null, c
     const minipoolAddress = (await rocketMinipoolFactory.getExpectedAddress(txOptions.from, salt)).substr(2);
 
     const ethMatched1 = await rocketNodeStaking.getNodeETHMatched(txOptions.from);
-    await rocketNodeDeposit.createVacantMinipool(bondAmount, '0'.ether, pubkey, salt, '0x' + minipoolAddress, currentBalance, txOptions);
+    await rocketNodeDeposit.createVacantMinipool(bondAmount, '0'.ether, pubkey, salt, '0x' + minipoolAddress, txOptions);
     const ethMatched2 = await rocketNodeStaking.getNodeETHMatched(txOptions.from);
 
     // Expect node's ETH matched to be increased by (32 - bondAmount)
@@ -232,6 +234,8 @@ export async function stakeMinipool(minipool, txOptions) {
 
     // Get contracts
     const rocketMinipoolManager = preUpdate ? await RocketMinipoolManagerOld.deployed() : await RocketMinipoolManager.deployed()
+    const rocketMinipoolVerifier = await RocketMinipoolVerifier.deployed();
+    const rocketStorage = await RocketStorage.deployed();
 
     // Get minipool validator pubkey
     const validatorPubkey = await rocketMinipoolManager.getMinipoolPubkey(minipool.address);
@@ -262,15 +266,36 @@ export async function stakeMinipool(minipool, txOptions) {
     }
     let depositDataRoot = getDepositDataRoot(depositData);
 
+    // Generate a fake beacon state root and proof and add to mock beacon state root set
+    const proof = generateBeaconStateProofForStake(validatorPubkey, withdrawalCredentials, 1)
+    const guardian = await rocketStorage.getGuardian();
+    await rocketMinipoolVerifier.addBeaconStateRoot(proof.beaconStateRoot, {from: guardian});
+
     // Stake
-    await minipool.stake(depositData.signature, depositDataRoot, txOptions);
+    await minipool.stake(depositData.signature, depositDataRoot, proof, txOptions);
 
 }
 
 
 // Promote a minipool to staking
 export async function promoteMinipool(minipool, txOptions) {
-    await minipool.promote(txOptions);
+    const preUpdate = !(await upgradeExecuted());
+
+    // Get contracts
+    const rocketMinipoolManager = preUpdate ? await RocketMinipoolManagerOld.deployed() : await RocketMinipoolManager.deployed()
+    const rocketStorage = await RocketStorage.deployed();
+    const rocketMinipoolVerifier = await RocketMinipoolVerifier.deployed();
+
+    // Get minipool validator pubkey
+    const validatorPubkey = await rocketMinipoolManager.getMinipoolPubkey(minipool.address);
+    const withdrawalCredentials = await rocketMinipoolManager.getMinipoolWithdrawalCredentials.call(minipool.address);
+
+    // Generate a fake beacon state root and proof and add to mock beacon state root set
+    const proof = generateBeaconStateProofForPromotion(validatorPubkey, withdrawalCredentials, '32000000000'.BN, 1);
+    const guardian = await rocketStorage.getGuardian();
+    await rocketMinipoolVerifier.addBeaconStateRoot(proof.beaconStateRoot, {from: guardian});
+
+    await minipool.promote(proof, txOptions);
 }
 
 

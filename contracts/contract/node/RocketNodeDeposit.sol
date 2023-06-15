@@ -163,8 +163,7 @@ contract RocketNodeDeposit is RocketBase, RocketNodeDepositInterface {
     /// @param _validatorPubkey Pubkey of the validator the node operator wishes to migrate
     /// @param _salt Salt used to deterministically construct the minipool's address
     /// @param _expectedMinipoolAddress The expected deterministic minipool address. Will revert if it doesn't match
-    /// @param _currentBalance The current balance of the validator on the beaconchain (will be checked by oDAO and scrubbed if not correct)
-    function createVacantMinipool(uint256 _bondAmount, uint256 _minimumNodeFee, bytes calldata _validatorPubkey, uint256 _salt, address _expectedMinipoolAddress, uint256 _currentBalance) override external onlyLatestContract("rocketNodeDeposit", address(this)) onlyRegisteredNode(msg.sender) {
+    function createVacantMinipool(uint256 _bondAmount, uint256 _minimumNodeFee, bytes calldata _validatorPubkey, uint256 _salt, address _expectedMinipoolAddress) override external onlyLatestContract("rocketNodeDeposit", address(this)) onlyRegisteredNode(msg.sender) {
         // Check pre-conditions
         checkVacantMinipoolsEnabled();
         checkDistributorInitialised();
@@ -175,7 +174,7 @@ contract RocketNodeDeposit is RocketBase, RocketNodeDepositInterface {
         uint256 launchAmount = rocketDAOProtocolSettingsMinipool.getLaunchBalance();
         _increaseEthMatched(msg.sender, launchAmount.sub(_bondAmount));
         // Create the minipool
-        _createVacantMinipool(_salt, _validatorPubkey, _bondAmount, _expectedMinipoolAddress, _currentBalance);
+        _createVacantMinipool(_salt, _validatorPubkey, _bondAmount, _expectedMinipoolAddress);
     }
 
     /// @notice Called by minipools during bond reduction to increase the amount of ETH the node operator has
@@ -233,14 +232,13 @@ contract RocketNodeDeposit is RocketBase, RocketNodeDepositInterface {
     /// @param _validatorPubkey Pubkey of the validator owning this minipool
     /// @param _bondAmount ETH value the node operator is putting up as capital for this minipool
     /// @param _expectedMinipoolAddress The expected minipool address. Reverts if not correct
-    /// @param _currentBalance The current balance of the validator on the beaconchain (will be checked by oDAO and scrubbed if not correct)
-    function _createVacantMinipool(uint256 _salt, bytes calldata _validatorPubkey, uint256 _bondAmount, address _expectedMinipoolAddress, uint256 _currentBalance) private returns (RocketMinipoolInterface) {
+    function _createVacantMinipool(uint256 _salt, bytes calldata _validatorPubkey, uint256 _bondAmount, address _expectedMinipoolAddress) private returns (RocketMinipoolInterface) {
         // Load contracts
         RocketMinipoolManagerInterface rocketMinipoolManager = RocketMinipoolManagerInterface(getContractAddress("rocketMinipoolManager"));
         // Check minipool doesn't exist or previously exist
         require(!rocketMinipoolManager.getMinipoolExists(_expectedMinipoolAddress) && !rocketMinipoolManager.getMinipoolDestroyed(_expectedMinipoolAddress), "Minipool already exists or was previously destroyed");
         // Create minipool
-        RocketMinipoolInterface minipool = rocketMinipoolManager.createVacantMinipool(msg.sender, _salt, _validatorPubkey, _bondAmount, _currentBalance);
+        RocketMinipoolInterface minipool = rocketMinipoolManager.createVacantMinipool(msg.sender, _salt, _validatorPubkey, _bondAmount);
         // Ensure minipool address matches expected
         require(address(minipool) == _expectedMinipoolAddress, "Unexpected minipool address");
         // Return
