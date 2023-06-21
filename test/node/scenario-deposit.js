@@ -3,9 +3,9 @@ import {
     RocketMinipoolManager,
     RocketNodeDeposit,
     RocketStorage,
-} from '../_utils/artifacts';
-import { getDepositDataRoot, getValidatorPubkey, getValidatorSignature } from '../_utils/beacon';
-import { assertBN } from '../_helpers/bn';
+} from '../_utils/artifacts.js';
+import { getDepositDataRoot, getValidatorPubkey, getValidatorSignature } from '../_utils/beacon.js';
+import { assertBN } from '../_helpers/bn.js';
 
 let minipoolSalt = 0;
 

@@ -1,5 +1,5 @@
-import { RocketMinipoolManager, RocketDAOProtocolSettingsMinipool, RocketNetworkPrices, RocketDAOProtocolSettingsNode, RocketNodeStaking, RocketTokenRPL, RocketVault } from '../_utils/artifacts';
-import { assertBN } from '../_helpers/bn';
+import { RocketMinipoolManager, RocketDAOProtocolSettingsMinipool, RocketNetworkPrices, RocketDAOProtocolSettingsNode, RocketNodeStaking, RocketTokenRPL, RocketVault } from '../_utils/artifacts.js';
+import { assertBN } from '../_helpers/bn.js';
 
 
 // Stake RPL against the node

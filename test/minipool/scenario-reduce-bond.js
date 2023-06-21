@@ -3,8 +3,8 @@ import {
     RocketMinipoolManager,
     RocketNodeDeposit,
     RocketNodeStaking,
-} from '../_utils/artifacts';
-import { assertBN } from '../_helpers/bn';
+} from '../_utils/artifacts.js';
+import { assertBN } from '../_helpers/bn.js';
 
 
 // Reduce bonding amount of a minipool

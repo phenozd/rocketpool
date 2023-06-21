@@ -8,9 +8,9 @@ import {
     RocketDAOProtocolSettingsNode,
     RocketStorage,
     RocketNodeStaking,
-} from '../_utils/artifacts';
-import { getValidatorPubkey, getValidatorSignature, getDepositDataRoot } from '../_utils/beacon';
-import { assertBN } from './bn';
+} from '../_utils/artifacts.js';
+import { getValidatorPubkey, getValidatorSignature, getDepositDataRoot } from '../_utils/beacon.js';
+import { assertBN } from './bn.js';
 
 // Possible states that a proposal may be in
 export const minipoolStates = {

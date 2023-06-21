@@ -1,5 +1,5 @@
-const { RocketNodeManager, RocketMinipoolManager, RocketMinipoolDelegate } = require('../_utils/artifacts');
-const { assertBN } = require('./bn');
+const { RocketNodeManager, RocketMinipoolManager, RocketMinipoolDelegate } = require('../_utils/artifacts.js');
+const { assertBN } = require('./bn.js');
 
 async function checkInvariants() {
     const nodeAddresses = await getNodeAddresses();

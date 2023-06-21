@@ -1,13 +1,13 @@
-import { mineBlocks, increaseTime, getCurrentTime } from '../_utils/evm'
-import { printTitle } from '../_utils/formatting';
-import { shouldRevert } from '../_utils/testing';
-import { registerNode, setNodeTrusted } from '../_helpers/node';
-import { executeUpdateBalances, submitBalances } from './scenario-submit-balances'
-import { RocketDAONodeTrustedSettingsProposals, RocketDAOProtocolSettingsNetwork } from '../_utils/artifacts'
-import { setDAOProtocolBootstrapSetting } from '../dao/scenario-dao-protocol-bootstrap';
-import { daoNodeTrustedExecute, daoNodeTrustedMemberLeave, daoNodeTrustedPropose, daoNodeTrustedVote } from '../dao/scenario-dao-node-trusted'
-import { getDAOProposalEndTime, getDAOProposalStartTime } from '../dao/scenario-dao-proposal'
-import { setDAONodeTrustedBootstrapSetting } from '../dao/scenario-dao-node-trusted-bootstrap'
+import { mineBlocks, increaseTime, getCurrentTime } from '../_utils/evm.js'
+import { printTitle } from '../_utils/formatting.js';
+import { shouldRevert } from '../_utils/testing.js';
+import { registerNode, setNodeTrusted } from '../_helpers/node.js';
+import { executeUpdateBalances, submitBalances } from './scenario-submit-balances.js'
+import { RocketDAONodeTrustedSettingsProposals, RocketDAOProtocolSettingsNetwork } from '../_utils/artifacts.js'
+import { setDAOProtocolBootstrapSetting } from '../dao/scenario-dao-protocol-bootstrap.js';
+import { daoNodeTrustedExecute, daoNodeTrustedMemberLeave, daoNodeTrustedPropose, daoNodeTrustedVote } from '../dao/scenario-dao-node-trusted.js'
+import { getDAOProposalEndTime, getDAOProposalStartTime } from '../dao/scenario-dao-proposal.js'
+import { setDAONodeTrustedBootstrapSetting } from '../dao/scenario-dao-node-trusted-bootstrap.js'
 
 export default function() {
     contract('RocketNetworkBalances', async (accounts) => {

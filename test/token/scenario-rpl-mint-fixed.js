@@ -1,5 +1,5 @@
-import { RocketTokenDummyRPL } from '../_utils/artifacts';
-import { assertBN } from '../_helpers/bn';
+import { RocketTokenDummyRPL } from '../_utils/artifacts.js';
+import { assertBN } from '../_helpers/bn.js';
 
 
 // Mint RPL from the dummy RPL contract to simulate a user having existing fixed supply RPL

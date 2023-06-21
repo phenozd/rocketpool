@@ -1,6 +1,6 @@
-import { RocketTokenRPL } from '../_utils/artifacts';
-import { RocketTokenDummyRPL } from '../_utils/artifacts';
-import { assertBN } from '../_helpers/bn';
+import { RocketTokenRPL } from '../_utils/artifacts.js';
+import { RocketTokenDummyRPL } from '../_utils/artifacts.js';
+import { assertBN } from '../_helpers/bn.js';
 
 // Burn current fixed supply RPL for new RPL
 export async function burnFixedRPL(amount, txOptions) {

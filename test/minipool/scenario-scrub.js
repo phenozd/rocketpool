@@ -5,9 +5,9 @@ import {
     RocketNodeStaking,
     RocketTokenRPL,
     RocketVault
-} from '../_utils/artifacts';
-import { assertBN } from '../_helpers/bn';
-import { minipoolStates } from '../_helpers/minipool';
+} from '../_utils/artifacts.js';
+import { assertBN } from '../_helpers/bn.js';
+import { minipoolStates } from '../_helpers/minipool.js';
 
 
 export async function voteScrub(minipool, txOptions) {

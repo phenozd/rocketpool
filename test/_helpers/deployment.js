@@ -1,5 +1,5 @@
 /*** Dependencies ********************/
-import { RocketStorage } from '../_utils/artifacts';
+import { RocketStorage } from '../_utils/artifacts.js';
 
 const hre = require('hardhat');
 const pako = require('pako');

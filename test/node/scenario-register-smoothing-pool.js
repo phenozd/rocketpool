@@ -1,4 +1,4 @@
-import { RocketNodeManager } from '../_utils/artifacts';
+import { RocketNodeManager } from '../_utils/artifacts.js';
 
 
 // Register a node

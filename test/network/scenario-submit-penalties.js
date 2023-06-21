@@ -3,9 +3,9 @@ import {
     RocketMinipoolPenalty,
     RocketNetworkPenalties,
     RocketStorage
-} from '../_utils/artifacts';
-import { shouldRevert } from '../_utils/testing';
-import { assertBN } from '../_helpers/bn';
+} from '../_utils/artifacts.js';
+import { shouldRevert } from '../_utils/testing.js';
+import { assertBN } from '../_helpers/bn.js';
 
 
 // Submit network balances

@@ -1,6 +1,6 @@
 // Dissolve a minipool
-import { minipoolStates } from '../_helpers/minipool';
-import { assertBN } from '../_helpers/bn';
+import { minipoolStates } from '../_helpers/minipool.js';
+import { assertBN } from '../_helpers/bn.js';
 
 export async function dissolve(minipool, txOptions) {
     // Get minipool details

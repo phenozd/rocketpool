@@ -1,17 +1,17 @@
-import { getCurrentTime, increaseTime } from '../_utils/evm'
-import { printTitle } from '../_utils/formatting';
-import { shouldRevert } from '../_utils/testing';
-import { registerNode, setNodeTrusted } from '../_helpers/node'
-import { executeUpdatePrices, submitPrices } from './scenario-submit-prices'
+import { getCurrentTime, increaseTime } from '../_utils/evm.js'
+import { printTitle } from '../_utils/formatting.js';
+import { shouldRevert } from '../_utils/testing.js';
+import { registerNode, setNodeTrusted } from '../_helpers/node.js'
+import { executeUpdatePrices, submitPrices } from './scenario-submit-prices.js'
 import {
     RocketDAONodeTrustedSettingsProposals,
     RocketDAOProtocolSettingsNetwork,
     RocketNetworkPrices
-} from '../_utils/artifacts'
-import { setDAOProtocolBootstrapSetting } from '../dao/scenario-dao-protocol-bootstrap';
-import { setDAONodeTrustedBootstrapSetting } from '../dao/scenario-dao-node-trusted-bootstrap'
-import { daoNodeTrustedExecute, daoNodeTrustedMemberLeave, daoNodeTrustedPropose, daoNodeTrustedVote } from '../dao/scenario-dao-node-trusted'
-import { getDAOProposalEndTime, getDAOProposalStartTime } from '../dao/scenario-dao-proposal'
+} from '../_utils/artifacts.js'
+import { setDAOProtocolBootstrapSetting } from '../dao/scenario-dao-protocol-bootstrap.js';
+import { setDAONodeTrustedBootstrapSetting } from '../dao/scenario-dao-node-trusted-bootstrap.js'
+import { daoNodeTrustedExecute, daoNodeTrustedMemberLeave, daoNodeTrustedPropose, daoNodeTrustedVote } from '../dao/scenario-dao-node-trusted.js'
+import { getDAOProposalEndTime, getDAOProposalStartTime } from '../dao/scenario-dao-proposal.js'
 
 export default function() {
     contract('RocketNetworkPrices', async (accounts) => {

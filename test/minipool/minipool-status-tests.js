@@ -1,16 +1,16 @@
-import { mineBlocks, getCurrentTime, increaseTime } from '../_utils/evm'
-import { userDeposit } from '../_helpers/deposit';
-import { getMinipoolMinimumRPLStake, createMinipool, stakeMinipool, minipoolStates } from '../_helpers/minipool';
-import { registerNode, setNodeTrusted, nodeStakeRPL } from '../_helpers/node';
-import { mintRPL } from '../_helpers/tokens';
+import { mineBlocks, getCurrentTime, increaseTime } from '../_utils/evm.js'
+import { userDeposit } from '../_helpers/deposit.js';
+import { getMinipoolMinimumRPLStake, createMinipool, stakeMinipool, minipoolStates } from '../_helpers/minipool.js';
+import { registerNode, setNodeTrusted, nodeStakeRPL } from '../_helpers/node.js';
+import { mintRPL } from '../_helpers/tokens.js';
 import {
     RocketDAONodeTrustedSettingsMinipool,
     RocketDAONodeTrustedSettingsProposals,
-} from '../_utils/artifacts';
-import { daoNodeTrustedExecute, daoNodeTrustedMemberLeave, daoNodeTrustedPropose, daoNodeTrustedVote } from '../dao/scenario-dao-node-trusted'
-import { getDAOProposalEndTime, getDAOProposalStartTime } from '../dao/scenario-dao-proposal'
-import { setDAONodeTrustedBootstrapSetting } from '../dao/scenario-dao-node-trusted-bootstrap'
-import { assertBN } from '../_helpers/bn';
+} from '../_utils/artifacts.js';
+import { daoNodeTrustedExecute, daoNodeTrustedMemberLeave, daoNodeTrustedPropose, daoNodeTrustedVote } from '../dao/scenario-dao-node-trusted.js'
+import { getDAOProposalEndTime, getDAOProposalStartTime } from '../dao/scenario-dao-proposal.js'
+import { setDAONodeTrustedBootstrapSetting } from '../dao/scenario-dao-node-trusted-bootstrap.js'
+import { assertBN } from '../_helpers/bn.js';
 
 export default function() {
     contract('RocketMinipoolStatus', async (accounts) => {

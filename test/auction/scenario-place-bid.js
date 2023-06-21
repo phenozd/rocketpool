@@ -1,5 +1,5 @@
-import { RocketAuctionManager, RocketDAOProtocolSettingsAuction, RocketVault } from '../_utils/artifacts';
-import { assertBN } from '../_helpers/bn';
+import { RocketAuctionManager, RocketDAOProtocolSettingsAuction, RocketVault } from '../_utils/artifacts.js';
+import { assertBN } from '../_helpers/bn.js';
 
 
 // Place a bid on a lot

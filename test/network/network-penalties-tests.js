@@ -1,15 +1,15 @@
-import { printTitle } from '../_utils/formatting';
-import { shouldRevert } from '../_utils/testing';
-import { nodeStakeRPL, registerNode, setNodeTrusted } from '../_helpers/node';
+import { printTitle } from '../_utils/formatting.js';
+import { shouldRevert } from '../_utils/testing.js';
+import { nodeStakeRPL, registerNode, setNodeTrusted } from '../_helpers/node.js';
 import {
     RocketDAONodeTrustedSettingsProposals,
     RocketMinipoolPenalty
-} from '../_utils/artifacts';
-import { setDAONodeTrustedBootstrapSetting } from '../dao/scenario-dao-node-trusted-bootstrap'
-import { createMinipool, getMinipoolMinimumRPLStake } from '../_helpers/minipool';
-import { submitPenalty } from './scenario-submit-penalties';
-import { mintRPL } from '../_helpers/tokens';
-import { userDeposit } from '../_helpers/deposit';
+} from '../_utils/artifacts.js';
+import { setDAONodeTrustedBootstrapSetting } from '../dao/scenario-dao-node-trusted-bootstrap.js'
+import { createMinipool, getMinipoolMinimumRPLStake } from '../_helpers/minipool.js';
+import { submitPenalty } from './scenario-submit-penalties.js';
+import { mintRPL } from '../_helpers/tokens.js';
+import { userDeposit } from '../_helpers/deposit.js';
 
 export default function() {
     contract('RocketNetworkPenalties', async (accounts) => {

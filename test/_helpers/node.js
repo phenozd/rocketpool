@@ -8,14 +8,14 @@ import {
     RocketStorage,
     RocketDAONodeTrusted,
     RocketMinipoolFactory,
-} from '../_utils/artifacts';
-import { setDaoNodeTrustedBootstrapMember } from '../dao/scenario-dao-node-trusted-bootstrap';
-import { daoNodeTrustedMemberJoin } from '../dao/scenario-dao-node-trusted';
-import { mintDummyRPL } from '../token/scenario-rpl-mint-fixed';
-import { burnFixedRPL } from '../token/scenario-rpl-burn-fixed';
-import { allowDummyRPL } from '../token/scenario-rpl-allow-fixed';
-import { getDepositDataRoot, getValidatorPubkey, getValidatorSignature } from '../_utils/beacon';
-import { assertBN } from './bn';
+} from '../_utils/artifacts.js';
+import { setDaoNodeTrustedBootstrapMember } from '../dao/scenario-dao-node-trusted-bootstrap.js';
+import { daoNodeTrustedMemberJoin } from '../dao/scenario-dao-node-trusted.js';
+import { mintDummyRPL } from '../token/scenario-rpl-mint-fixed.js';
+import { burnFixedRPL } from '../token/scenario-rpl-burn-fixed.js';
+import { allowDummyRPL } from '../token/scenario-rpl-allow-fixed.js';
+import { getDepositDataRoot, getValidatorPubkey, getValidatorSignature } from '../_utils/beacon.js';
+import { assertBN } from './bn.js';
 
 
 // Get a node's RPL stake

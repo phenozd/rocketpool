@@ -2,30 +2,30 @@ import {
     RocketDAOProtocolSettingsMinipool,
     RocketDAOProtocolSettingsNetwork,
     RocketDAONodeTrustedSettingsMinipool, RocketNodeStaking,
-} from '../_utils/artifacts';
-import { increaseTime } from '../_utils/evm';
-import { printTitle } from '../_utils/formatting';
-import { shouldRevert } from '../_utils/testing';
+} from '../_utils/artifacts.js';
+import { increaseTime } from '../_utils/evm.js';
+import { printTitle } from '../_utils/formatting.js';
+import { shouldRevert } from '../_utils/testing.js';
 import {
     getMinipoolMinimumRPLStake,
     createVacantMinipool, promoteMinipool, minipoolStates, closeMinipool,
-} from '../_helpers/minipool';
+} from '../_helpers/minipool.js';
 import {
     registerNode,
     setNodeTrusted,
     setNodeWithdrawalAddress,
     nodeStakeRPL,
     getNodeDepositCredit,
-} from '../_helpers/node';
-import { mintRPL } from '../_helpers/tokens';
-import { setDAOProtocolBootstrapSetting } from '../dao/scenario-dao-protocol-bootstrap';
+} from '../_helpers/node.js';
+import { mintRPL } from '../_helpers/tokens.js';
+import { setDAOProtocolBootstrapSetting } from '../dao/scenario-dao-protocol-bootstrap.js';
 import {
   setDAONodeTrustedBootstrapSetting,
-} from '../dao/scenario-dao-node-trusted-bootstrap';
-import { voteScrub } from './scenario-scrub';
-import { assertBN } from '../_helpers/bn';
-import { refund } from './scenario-refund';
-import { getValidatorPubkey } from '../_utils/beacon';
+} from '../dao/scenario-dao-node-trusted-bootstrap.js';
+import { voteScrub } from './scenario-scrub.js';
+import { assertBN } from '../_helpers/bn.js';
+import { refund } from './scenario-refund.js';
+import { getValidatorPubkey } from '../_utils/beacon.js';
 
 export default function() {
     contract('RocketMinipool', async (accounts) => {

@@ -1,4 +1,4 @@
-import { RocketDAOProposal } from '../_utils/artifacts';
+import { RocketDAOProposal } from '../_utils/artifacts.js';
 
 
 // Possible states that a proposal may be in

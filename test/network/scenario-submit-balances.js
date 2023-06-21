@@ -1,5 +1,5 @@
-import { RocketDAONodeTrusted, RocketNetworkBalances, RocketStorage } from '../_utils/artifacts';
-import { assertBN } from '../_helpers/bn';
+import { RocketDAONodeTrusted, RocketNetworkBalances, RocketStorage } from '../_utils/artifacts.js';
+import { assertBN } from '../_helpers/bn.js';
 
 
 // Submit network balances

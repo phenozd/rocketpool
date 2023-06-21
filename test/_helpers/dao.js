@@ -1,5 +1,5 @@
-import { RocketDAONodeTrusted, RocketDAONodeTrustedActions, RocketDAONodeTrustedSettingsMembers } from '../_utils/artifacts';
-import { mintRPL, approveRPL } from './tokens';
+import { RocketDAONodeTrusted, RocketDAONodeTrustedActions, RocketDAONodeTrustedSettingsMembers } from '../_utils/artifacts.js';
+import { mintRPL, approveRPL } from './tokens.js';
 
 
 export async function mintRPLBond(owner, node) {

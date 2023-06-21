@@ -1,5 +1,5 @@
-import { RocketTokenRETH } from '../_utils/artifacts';
-import { assertBN } from '../_helpers/bn';
+import { RocketTokenRETH } from '../_utils/artifacts.js';
+import { assertBN } from '../_helpers/bn.js';
 
 
 // Transfer rETH between accounts

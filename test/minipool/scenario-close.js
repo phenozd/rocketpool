@@ -1,5 +1,5 @@
-import { RocketNodeManager, RocketNodeStaking } from '../_utils/artifacts';
-import { assertBN } from '../_helpers/bn';
+import { RocketNodeManager, RocketNodeStaking } from '../_utils/artifacts.js';
+import { assertBN } from '../_helpers/bn.js';
 
 
 // Close a minipool

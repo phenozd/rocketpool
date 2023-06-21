@@ -1,21 +1,21 @@
-import { printTitle } from '../_utils/formatting';
+import { printTitle } from '../_utils/formatting.js';
 import {
     RocketNodeManager,
     RocketDAONodeTrustedSettingsMinipool,
     RocketNodeDistributorFactory
-} from '../_utils/artifacts';
+} from '../_utils/artifacts.js';
 import {
     createMinipool,
     getMinipoolMinimumRPLStake,
     stakeMinipool,
-} from '../_helpers/minipool';
-import { registerNode, setNodeTrusted, nodeStakeRPL } from '../_helpers/node';
-import { mintRPL } from '../_helpers/tokens';
-import { distributeRewards } from './scenario-distribute-rewards';
-import { increaseTime } from '../_utils/evm';
-import { setDAONodeTrustedBootstrapSetting } from '../dao/scenario-dao-node-trusted-bootstrap';
-import { shouldRevert } from '../_utils/testing';
-import { userDeposit } from '../_helpers/deposit';
+} from '../_helpers/minipool.js';
+import { registerNode, setNodeTrusted, nodeStakeRPL } from '../_helpers/node.js';
+import { mintRPL } from '../_helpers/tokens.js';
+import { distributeRewards } from './scenario-distribute-rewards.js';
+import { increaseTime } from '../_utils/evm.js';
+import { setDAONodeTrustedBootstrapSetting } from '../dao/scenario-dao-node-trusted-bootstrap.js';
+import { shouldRevert } from '../_utils/testing.js';
+import { userDeposit } from '../_helpers/deposit.js';
 
 export default function() {
     contract('RocketNodeDistributor', async (accounts) => {

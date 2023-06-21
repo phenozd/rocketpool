@@ -4,8 +4,8 @@ import {
   RocketNodeDistributorFactory, RocketNodeManager, RocketNodeManagerNew,
   RocketStorage,
   RocketTokenRETH
-} from '../_utils/artifacts';
-import { assertBN } from '../_helpers/bn';
+} from '../_utils/artifacts.js';
+import { assertBN } from '../_helpers/bn.js';
 
 
 export async function distributeRewards(nodeAddress, txOptions) {

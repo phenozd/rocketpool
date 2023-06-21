@@ -1,13 +1,13 @@
-import { printTitle } from '../_utils/formatting';
-import { shouldRevert } from '../_utils/testing';
-import { registerNode } from '../_helpers/node';
-import { RocketDAOProtocolSettingsNode, RocketNodeManager } from '../_utils/artifacts'
-import { setDAOProtocolBootstrapSetting, setRewardsClaimIntervalTime } from '../dao/scenario-dao-protocol-bootstrap';
-import { register } from './scenario-register';
-import { setTimezoneLocation } from './scenario-set-timezone';
-import { setWithdrawalAddress, confirmWithdrawalAddress } from './scenario-set-withdrawal-address';
-import { setSmoothingPoolRegistrationState } from './scenario-register-smoothing-pool';
-import { increaseTime } from '../_utils/evm';
+import { printTitle } from '../_utils/formatting.js';
+import { shouldRevert } from '../_utils/testing.js';
+import { registerNode } from '../_helpers/node.js';
+import { RocketDAOProtocolSettingsNode, RocketNodeManager } from '../_utils/artifacts.js'
+import { setDAOProtocolBootstrapSetting, setRewardsClaimIntervalTime } from '../dao/scenario-dao-protocol-bootstrap.js';
+import { register } from './scenario-register.js';
+import { setTimezoneLocation } from './scenario-set-timezone.js';
+import { setWithdrawalAddress, confirmWithdrawalAddress } from './scenario-set-withdrawal-address.js';
+import { setSmoothingPoolRegistrationState } from './scenario-register-smoothing-pool.js';
+import { increaseTime } from '../_utils/evm.js';
 
 
 export default function() {

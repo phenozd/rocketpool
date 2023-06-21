@@ -1,8 +1,8 @@
-import { printTitle } from '../_utils/formatting';
-import { getNodeFeeByDemand } from '../_helpers/network';
-import { RocketDAOProtocolSettingsNetwork } from '../_utils/artifacts';
-import { setDAOProtocolBootstrapSetting } from '../dao/scenario-dao-protocol-bootstrap';
-import { assertBN } from '../_helpers/bn';
+import { printTitle } from '../_utils/formatting.js';
+import { getNodeFeeByDemand } from '../_helpers/network.js';
+import { RocketDAOProtocolSettingsNetwork } from '../_utils/artifacts.js';
+import { setDAOProtocolBootstrapSetting } from '../dao/scenario-dao-protocol-bootstrap.js';
+import { assertBN } from '../_helpers/bn.js';
 
 export default function() {
     contract('RocketNetworkFees', async (accounts) => {

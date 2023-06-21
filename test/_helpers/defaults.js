@@ -1,9 +1,9 @@
-import { setDAOProtocolBootstrapSetting } from '../dao/scenario-dao-protocol-bootstrap';
+import { setDAOProtocolBootstrapSetting } from '../dao/scenario-dao-protocol-bootstrap.js';
 import {
     RocketDAOProtocolSettingsDeposit, RocketDAOProtocolSettingsInflation,
     RocketDAOProtocolSettingsMinipool, RocketDAOProtocolSettingsNetwork,
     RocketDAOProtocolSettingsNode,
-} from '../_utils/artifacts';
+} from '../_utils/artifacts.js';
 
 export async function setDefaultParameters() {
     const [guardian] = await web3.eth.getAccounts();

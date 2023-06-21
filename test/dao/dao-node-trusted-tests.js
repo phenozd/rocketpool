@@ -1,16 +1,16 @@
-import { increaseTime, getCurrentTime } from '../_utils/evm'
-import { printTitle } from '../_utils/formatting';
-import { shouldRevert } from '../_utils/testing';
-import { compressABI } from '../_utils/contract';
-import { registerNode, setNodeTrusted } from '../_helpers/node';
-import { mintDummyRPL } from '../token/scenario-rpl-mint-fixed';
-import { burnFixedRPL } from '../token/scenario-rpl-burn-fixed';
-import { allowDummyRPL } from '../token/scenario-rpl-allow-fixed';
-import { setDaoNodeTrustedBootstrapMember, setDAONodeTrustedBootstrapSetting, setDaoNodeTrustedBootstrapModeDisabled, setDaoNodeTrustedBootstrapUpgrade, setDaoNodeTrustedMemberRequired } from './scenario-dao-node-trusted-bootstrap';
-import { daoNodeTrustedExecute, getDAOMemberIsValid, daoNodeTrustedPropose, daoNodeTrustedVote, daoNodeTrustedCancel, daoNodeTrustedMemberJoin, daoNodeTrustedMemberLeave, daoNodeTrustedMemberChallengeMake, daoNodeTrustedMemberChallengeDecide } from './scenario-dao-node-trusted';
-import { proposalStates, getDAOProposalState, getDAOProposalStartTime, getDAOProposalEndTime, getDAOProposalExpires } from './scenario-dao-proposal';
-import { assertBN } from '../_helpers/bn';
-import { RocketDAONodeTrusted, RocketDAONodeTrustedActions, RocketDAONodeTrustedSettingsMembers, RocketDAONodeTrustedSettingsProposals, RocketTokenRPL, RocketMinipoolManager, RocketDAONodeTrustedUpgrade, RocketStorage } from '../_utils/artifacts';
+import { increaseTime, getCurrentTime } from '../_utils/evm.js'
+import { printTitle } from '../_utils/formatting.js';
+import { shouldRevert } from '../_utils/testing.js';
+import { compressABI } from '../_utils/contract.js';
+import { registerNode, setNodeTrusted } from '../_helpers/node.js';
+import { mintDummyRPL } from '../token/scenario-rpl-mint-fixed.js';
+import { burnFixedRPL } from '../token/scenario-rpl-burn-fixed.js';
+import { allowDummyRPL } from '../token/scenario-rpl-allow-fixed.js';
+import { setDaoNodeTrustedBootstrapMember, setDAONodeTrustedBootstrapSetting, setDaoNodeTrustedBootstrapModeDisabled, setDaoNodeTrustedBootstrapUpgrade, setDaoNodeTrustedMemberRequired } from './scenario-dao-node-trusted-bootstrap.js';
+import { daoNodeTrustedExecute, getDAOMemberIsValid, daoNodeTrustedPropose, daoNodeTrustedVote, daoNodeTrustedCancel, daoNodeTrustedMemberJoin, daoNodeTrustedMemberLeave, daoNodeTrustedMemberChallengeMake, daoNodeTrustedMemberChallengeDecide } from './scenario-dao-node-trusted.js';
+import { proposalStates, getDAOProposalState, getDAOProposalStartTime, getDAOProposalEndTime, getDAOProposalExpires } from './scenario-dao-proposal.js';
+import { assertBN } from '../_helpers/bn.js';
+import { RocketDAONodeTrusted, RocketDAONodeTrustedActions, RocketDAONodeTrustedSettingsMembers, RocketDAONodeTrustedSettingsProposals, RocketTokenRPL, RocketMinipoolManager, RocketDAONodeTrustedUpgrade, RocketStorage } from '../_utils/artifacts.js';
 
 
 export default function() {

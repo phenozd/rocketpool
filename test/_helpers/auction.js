@@ -1,4 +1,4 @@
-import { RocketAuctionManager } from '../_utils/artifacts';
+import { RocketAuctionManager } from '../_utils/artifacts.js';
 
 
 // Get lot start/end blocks

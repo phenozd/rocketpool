@@ -9,39 +9,39 @@ import {
     RocketMinipoolBase,
     RocketMinipoolBondReducer,
     RocketDAOProtocolSettingsRewards, RocketNodeManager, RocketMinipoolDelegate, RocketNodeDistributorFactory,
-} from '../_utils/artifacts';
-import { increaseTime } from '../_utils/evm';
-import { printTitle } from '../_utils/formatting';
-import { shouldRevert } from '../_utils/testing';
-import { userDeposit } from '../_helpers/deposit';
+} from '../_utils/artifacts.js';
+import { increaseTime } from '../_utils/evm.js';
+import { printTitle } from '../_utils/formatting.js';
+import { shouldRevert } from '../_utils/testing.js';
+import { userDeposit } from '../_helpers/deposit.js';
 import {
     getMinipoolMinimumRPLStake,
     createMinipool,
     stakeMinipool,
     dissolveMinipool,
     getNodeActiveMinipoolCount, promoteMinipool, minipoolStates,
-} from '../_helpers/minipool';
+} from '../_helpers/minipool.js';
 import {
     registerNode,
     setNodeTrusted,
     setNodeWithdrawalAddress,
     nodeStakeRPL,
     getNodeAverageFee,
-} from '../_helpers/node';
-import { mintRPL } from '../_helpers/tokens';
-import { close } from './scenario-close';
-import { dissolve } from './scenario-dissolve';
-import { refund } from './scenario-refund';
-import { stake } from './scenario-stake';
-import { beginUserDistribute, withdrawValidatorBalance } from './scenario-withdraw-validator-balance';
-import { setDAOProtocolBootstrapSetting } from '../dao/scenario-dao-protocol-bootstrap';
+} from '../_helpers/node.js';
+import { mintRPL } from '../_helpers/tokens.js';
+import { close } from './scenario-close.js';
+import { dissolve } from './scenario-dissolve.js';
+import { refund } from './scenario-refund.js';
+import { stake } from './scenario-stake.js';
+import { beginUserDistribute, withdrawValidatorBalance } from './scenario-withdraw-validator-balance.js';
+import { setDAOProtocolBootstrapSetting } from '../dao/scenario-dao-protocol-bootstrap.js';
 import {
   setDAONodeTrustedBootstrapSetting,
   setDaoNodeTrustedBootstrapUpgrade
-} from '../dao/scenario-dao-node-trusted-bootstrap';
-import { reduceBond } from './scenario-reduce-bond';
-import { assertBN } from '../_helpers/bn';
-import { skimRewards } from './scenario-skim-rewards';
+} from '../dao/scenario-dao-node-trusted-bootstrap.js';
+import { reduceBond } from './scenario-reduce-bond.js';
+import { assertBN } from '../_helpers/bn.js';
+import { skimRewards } from './scenario-skim-rewards.js';
 import { artifacts } from 'hardhat';
 
 export default function() {

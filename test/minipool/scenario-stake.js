@@ -1,7 +1,7 @@
-import { RocketMinipoolManager, RocketDAOProtocolSettingsMinipool } from '../_utils/artifacts';
-import { getValidatorSignature, getDepositDataRoot, getValidatorPubkey } from '../_utils/beacon';
-import { assertBN } from '../_helpers/bn';
-import { minipoolStates } from '../_helpers/minipool';
+import { RocketMinipoolManager, RocketDAOProtocolSettingsMinipool } from '../_utils/artifacts.js';
+import { getValidatorSignature, getDepositDataRoot, getValidatorPubkey } from '../_utils/beacon.js';
+import { assertBN } from '../_helpers/bn.js';
+import { minipoolStates } from '../_helpers/minipool.js';
 
 
 // Stake a minipool

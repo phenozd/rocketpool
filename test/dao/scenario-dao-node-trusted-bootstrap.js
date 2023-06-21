@@ -1,6 +1,6 @@
-import { RocketDAONodeTrusted, RocketStorage, RocketVault, RocketTokenRPL } from '../_utils/artifacts';
-import { compressABI, decompressABI } from '../_utils/contract';
-import { assertBN } from '../_helpers/bn';
+import { RocketDAONodeTrusted, RocketStorage, RocketVault, RocketTokenRPL } from '../_utils/artifacts.js';
+import { compressABI, decompressABI } from '../_utils/contract.js';
+import { assertBN } from '../_helpers/bn.js';
 
 
 // The trusted node DAO can be bootstrapped with several nodes

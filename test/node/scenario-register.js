@@ -1,5 +1,5 @@
-import { RocketNodeManager } from '../_utils/artifacts';
-import { assertBN } from '../_helpers/bn';
+import { RocketNodeManager } from '../_utils/artifacts.js';
+import { assertBN } from '../_helpers/bn.js';
 
 
 // Register a node

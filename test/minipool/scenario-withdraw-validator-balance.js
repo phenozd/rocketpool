@@ -3,8 +3,8 @@ import {
     RocketMinipoolPenalty,
     RocketNodeManager,
     RocketTokenRETH
-} from '../_utils/artifacts'
-import { assertBN } from '../_helpers/bn';
+} from '../_utils/artifacts.js'
+import { assertBN } from '../_helpers/bn.js';
 
 export async function withdrawValidatorBalance(minipool, withdrawalBalance, from) {
     // Load contracts

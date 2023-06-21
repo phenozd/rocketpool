@@ -1,38 +1,38 @@
-import { getCurrentTime, increaseTime } from '../_utils/evm'
-import { printTitle } from '../_utils/formatting';
-import { shouldRevert } from '../_utils/testing';
-import { submitPrices } from '../_helpers/network';
+import { getCurrentTime, increaseTime } from '../_utils/evm.js'
+import { printTitle } from '../_utils/formatting.js';
+import { shouldRevert } from '../_utils/testing.js';
+import { submitPrices } from '../_helpers/network.js';
 import {
     registerNode,
     setNodeTrusted,
     setNodeWithdrawalAddress,
     nodeStakeRPL,
     getNodeEffectiveRPLStake,
-} from '../_helpers/node'
+} from '../_helpers/node.js'
 import {
     RocketDAONodeTrustedSettingsMinipool,
     RocketDAOProtocolSettingsNode,
     RocketMerkleDistributorMainnet,
     RocketSmoothingPool,
     RocketStorage,
-} from '../_utils/artifacts';
-import { setDAOProtocolBootstrapSetting, setRewardsClaimIntervalTime, setRPLInflationStartTime } from '../dao/scenario-dao-protocol-bootstrap'
-import { mintRPL } from '../_helpers/tokens';
-import { rewardsClaimersPercTotalGet } from './scenario-rewards-claim';
-import { setDAONetworkBootstrapRewardsClaimer, setRPLInflationIntervalRate } from '../dao/scenario-dao-protocol-bootstrap';
+} from '../_utils/artifacts.js';
+import { setDAOProtocolBootstrapSetting, setRewardsClaimIntervalTime, setRPLInflationStartTime } from '../dao/scenario-dao-protocol-bootstrap.js'
+import { mintRPL } from '../_helpers/tokens.js';
+import { rewardsClaimersPercTotalGet } from './scenario-rewards-claim.js';
+import { setDAONetworkBootstrapRewardsClaimer, setRPLInflationIntervalRate } from '../dao/scenario-dao-protocol-bootstrap.js';
 
 // Contracts
-import { RocketRewardsPool } from '../_utils/artifacts';
-import { createMinipool, stakeMinipool } from '../_helpers/minipool'
-import { userDeposit } from '../_helpers/deposit'
-import { setDAONodeTrustedBootstrapSetting } from '../dao/scenario-dao-node-trusted-bootstrap';
-import { executeRewards, submitRewards } from './scenario-submit-rewards';
-import { claimRewards } from './scenario-claim-rewards';
-import { claimAndStakeRewards } from './scenario-claim-and-stake-rewards';
-import { parseRewardsMap } from '../_utils/merkle-tree';
-import { daoNodeTrustedExecute, daoNodeTrustedPropose, daoNodeTrustedVote } from '../dao/scenario-dao-node-trusted';
-import { getDAOProposalStartTime } from '../dao/scenario-dao-proposal';
-import { assertBN } from '../_helpers/bn';
+import { RocketRewardsPool } from '../_utils/artifacts.js';
+import { createMinipool, stakeMinipool } from '../_helpers/minipool.js'
+import { userDeposit } from '../_helpers/deposit.js'
+import { setDAONodeTrustedBootstrapSetting } from '../dao/scenario-dao-node-trusted-bootstrap.js';
+import { executeRewards, submitRewards } from './scenario-submit-rewards.js';
+import { claimRewards } from './scenario-claim-rewards.js';
+import { claimAndStakeRewards } from './scenario-claim-and-stake-rewards.js';
+import { parseRewardsMap } from '../_utils/merkle-tree.js';
+import { daoNodeTrustedExecute, daoNodeTrustedPropose, daoNodeTrustedVote } from '../dao/scenario-dao-node-trusted.js';
+import { getDAOProposalStartTime } from '../dao/scenario-dao-proposal.js';
+import { assertBN } from '../_helpers/bn.js';
 
 
 export default function() {

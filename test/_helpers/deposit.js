@@ -1,4 +1,4 @@
-import { RocketDepositPool } from '../_utils/artifacts';
+import { RocketDepositPool } from '../_utils/artifacts.js';
 
 
 // Get the deposit pool excess ETH balance

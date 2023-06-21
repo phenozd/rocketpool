@@ -1,9 +1,9 @@
 import {
     RocketDAONodeTrustedSettingsMinipool, RocketDAOProtocolSettingsMinipool,
     RocketNodeStaking,
-} from '../_utils/artifacts';
-import { printTitle } from '../_utils/formatting';
-import { shouldRevert } from '../_utils/testing';
+} from '../_utils/artifacts.js';
+import { printTitle } from '../_utils/formatting.js';
+import { shouldRevert } from '../_utils/testing.js';
 import {
     registerNode,
     nodeStakeRPL,
@@ -11,16 +11,16 @@ import {
     setNodeTrusted,
     nodeStakeRPLFor,
     setStakeRPLForAllowed,
-} from '../_helpers/node';
-import { mintRPL, approveRPL } from '../_helpers/tokens';
-import { stakeRpl } from './scenario-stake-rpl';
-import { withdrawRpl } from './scenario-withdraw-rpl';
-import { createMinipool, stakeMinipool } from '../_helpers/minipool'
-import { beginUserDistribute, withdrawValidatorBalance } from '../minipool/scenario-withdraw-validator-balance';
-import { userDeposit } from '../_helpers/deposit'
-import { increaseTime } from '../_utils/evm'
-import { setDAONodeTrustedBootstrapSetting } from '../dao/scenario-dao-node-trusted-bootstrap';
-import { setDAOProtocolBootstrapSetting, setRewardsClaimIntervalTime } from '../dao/scenario-dao-protocol-bootstrap';
+} from '../_helpers/node.js';
+import { mintRPL, approveRPL } from '../_helpers/tokens.js';
+import { stakeRpl } from './scenario-stake-rpl.js';
+import { withdrawRpl } from './scenario-withdraw-rpl.js';
+import { createMinipool, stakeMinipool } from '../_helpers/minipool.js'
+import { beginUserDistribute, withdrawValidatorBalance } from '../minipool/scenario-withdraw-validator-balance.js';
+import { userDeposit } from '../_helpers/deposit.js'
+import { increaseTime } from '../_utils/evm.js'
+import { setDAONodeTrustedBootstrapSetting } from '../dao/scenario-dao-node-trusted-bootstrap.js';
+import { setDAOProtocolBootstrapSetting, setRewardsClaimIntervalTime } from '../dao/scenario-dao-protocol-bootstrap.js';
 
 export default function() {
     contract('RocketNodeStaking', async (accounts) => {

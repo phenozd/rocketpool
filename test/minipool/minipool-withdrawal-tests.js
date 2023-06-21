@@ -5,22 +5,22 @@ import {
     RocketStorage,
     PenaltyTest,
     RocketNodeStaking, RocketDAONodeTrustedSettingsMinipool,
-} from '../_utils/artifacts';
-import { printTitle } from '../_utils/formatting';
-import { shouldRevert } from '../_utils/testing';
-import { userDeposit } from '../_helpers/deposit';
-import { getMinipoolMinimumRPLStake, createMinipool, stakeMinipool } from '../_helpers/minipool';
-import { registerNode, setNodeTrusted, setNodeWithdrawalAddress, nodeStakeRPL } from '../_helpers/node';
-import { mintRPL } from '../_helpers/tokens';
-import { beginUserDistribute, withdrawValidatorBalance } from './scenario-withdraw-validator-balance';
-import { setDAOProtocolBootstrapSetting } from '../dao/scenario-dao-protocol-bootstrap';
-import { increaseTime, mineBlocks } from '../_utils/evm'
+} from '../_utils/artifacts.js';
+import { printTitle } from '../_utils/formatting.js';
+import { shouldRevert } from '../_utils/testing.js';
+import { userDeposit } from '../_helpers/deposit.js';
+import { getMinipoolMinimumRPLStake, createMinipool, stakeMinipool } from '../_helpers/minipool.js';
+import { registerNode, setNodeTrusted, setNodeWithdrawalAddress, nodeStakeRPL } from '../_helpers/node.js';
+import { mintRPL } from '../_helpers/tokens.js';
+import { beginUserDistribute, withdrawValidatorBalance } from './scenario-withdraw-validator-balance.js';
+import { setDAOProtocolBootstrapSetting } from '../dao/scenario-dao-protocol-bootstrap.js';
+import { increaseTime, mineBlocks } from '../_utils/evm.js'
 import {
     setDAONodeTrustedBootstrapSetting,
     setDaoNodeTrustedBootstrapUpgrade
-} from '../dao/scenario-dao-node-trusted-bootstrap';
-import { submitPrices } from '../_helpers/network';
-import { assertBN } from '../_helpers/bn';
+} from '../dao/scenario-dao-node-trusted-bootstrap.js';
+import { submitPrices } from '../_helpers/network.js';
+import { assertBN } from '../_helpers/bn.js';
 
 export default function() {
     contract('RocketMinipool', async (accounts) => {

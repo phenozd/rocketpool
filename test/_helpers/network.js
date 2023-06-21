@@ -1,4 +1,4 @@
-import { RocketNetworkBalances, RocketNetworkFees, RocketNetworkPrices, RocketNetworkWithdrawal } from '../_utils/artifacts';
+import { RocketNetworkBalances, RocketNetworkFees, RocketNetworkPrices } from '../_utils/artifacts.js';
 
 
 // Get the network total ETH balance

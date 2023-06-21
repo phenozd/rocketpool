@@ -1,7 +1,7 @@
-import { getCurrentTime, increaseTime } from '../_utils/evm'
-import { RocketTokenRPL, RocketVault } from '../_utils/artifacts';
-import { setRPLInflationIntervalRate, setRPLInflationStartTime } from '../dao/scenario-dao-protocol-bootstrap'
-import { assertBN } from '../_helpers/bn';
+import { getCurrentTime, increaseTime } from '../_utils/evm.js'
+import { RocketTokenRPL, RocketVault } from '../_utils/artifacts.js';
+import { setRPLInflationIntervalRate, setRPLInflationStartTime } from '../dao/scenario-dao-protocol-bootstrap.js'
+import { assertBN } from '../_helpers/bn.js';
 
 
 // Set inflation config

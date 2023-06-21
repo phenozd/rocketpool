@@ -1,10 +1,10 @@
-import { printTitle } from '../_utils/formatting';
-import { shouldRevert } from '../_utils/testing';
+import { printTitle } from '../_utils/formatting.js';
+import { shouldRevert } from '../_utils/testing.js';
 import {
   setDAOProtocolBootstrapSetting,
   setDaoProtocolBootstrapModeDisabled,
   setDAOProtocolBootstrapSettingMulti
-} from './scenario-dao-protocol-bootstrap'
+} from './scenario-dao-protocol-bootstrap.js'
 
 // Contracts
 import { RocketDAOProtocolSettingsAuction, RocketDAOProtocolSettingsDeposit, RocketDAOProtocolSettingsInflation, RocketDAOProtocolSettingsMinipool, RocketDAOProtocolSettingsNetwork, RocketDAOProtocolSettingsRewards } from '../_utils/artifacts';

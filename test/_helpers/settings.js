@@ -4,7 +4,7 @@ import {
     RocketDAOProtocolSettingsMinipool,
     RocketDAOProtocolSettingsNetwork,
     RocketDAOProtocolSettingsNode,
-} from '../_utils/artifacts';
+} from '../_utils/artifacts.js';
 
 
 // Auction settings

@@ -1,22 +1,22 @@
-import { printTitle } from '../_utils/formatting';
-import { shouldRevert } from '../_utils/testing';
-import { getDepositExcessBalance, userDeposit } from '../_helpers/deposit';
-import { getMinipoolMinimumRPLStake, createMinipool, stakeMinipool } from '../_helpers/minipool';
-import { submitBalances } from '../_helpers/network';
-import { registerNode, setNodeTrusted, nodeStakeRPL, setNodeWithdrawalAddress } from '../_helpers/node';
-import { depositExcessCollateral, getRethBalance, getRethCollateralRate, getRethExchangeRate, getRethTotalSupply, mintRPL } from '../_helpers/tokens'
-import { burnReth } from './scenario-reth-burn';
-import { transferReth } from './scenario-reth-transfer'
+import { printTitle } from '../_utils/formatting.js';
+import { shouldRevert } from '../_utils/testing.js';
+import { getDepositExcessBalance, userDeposit } from '../_helpers/deposit.js';
+import { getMinipoolMinimumRPLStake, createMinipool, stakeMinipool } from '../_helpers/minipool.js';
+import { submitBalances } from '../_helpers/network.js';
+import { registerNode, setNodeTrusted, nodeStakeRPL, setNodeWithdrawalAddress } from '../_helpers/node.js';
+import { depositExcessCollateral, getRethBalance, getRethCollateralRate, getRethExchangeRate, getRethTotalSupply, mintRPL } from '../_helpers/tokens.js'
+import { burnReth } from './scenario-reth-burn.js';
+import { transferReth } from './scenario-reth-transfer.js'
 import {
     RocketDAONodeTrustedSettingsMinipool, RocketDAOProtocolSettingsMinipool,
     RocketDAOProtocolSettingsNetwork,
     RocketTokenRETH,
-} from '../_utils/artifacts';
-import { setDAOProtocolBootstrapSetting } from '../dao/scenario-dao-protocol-bootstrap';
-import { beginUserDistribute, withdrawValidatorBalance } from '../minipool/scenario-withdraw-validator-balance';
-import { increaseTime, mineBlocks } from '../_utils/evm'
-import { setDAONodeTrustedBootstrapSetting } from '../dao/scenario-dao-node-trusted-bootstrap';
-import { assertBN } from '../_helpers/bn';
+} from '../_utils/artifacts.js';
+import { setDAOProtocolBootstrapSetting } from '../dao/scenario-dao-protocol-bootstrap.js';
+import { beginUserDistribute, withdrawValidatorBalance } from '../minipool/scenario-withdraw-validator-balance.js';
+import { increaseTime, mineBlocks } from '../_utils/evm.js'
+import { setDAONodeTrustedBootstrapSetting } from '../dao/scenario-dao-node-trusted-bootstrap.js';
+import { assertBN } from '../_helpers/bn.js';
 
 export default function() {
     contract('RocketTokenRETH', async (accounts) => {

@@ -3,9 +3,9 @@ import {
     RocketDAONodeTrusted,
     RocketRewardsPool,
     RocketTokenRETH, RocketTokenRPL,
-} from '../_utils/artifacts';
-import { parseRewardsMap } from '../_utils/merkle-tree';
-import { assertBN } from '../_helpers/bn';
+} from '../_utils/artifacts.js';
+import { parseRewardsMap } from '../_utils/merkle-tree.js';
+import { assertBN } from '../_helpers/bn.js';
 
 
 // Submit rewards

@@ -1,4 +1,4 @@
-import { RocketTokenRETH, RocketTokenNETH, RocketTokenDummyRPL, RocketTokenRPL } from '../_utils/artifacts';
+import { RocketTokenRETH , RocketTokenDummyRPL, RocketTokenRPL } from '../_utils/artifacts.js';
 
 
 // Get the RPL balance of an address

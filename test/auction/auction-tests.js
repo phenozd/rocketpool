@@ -1,25 +1,25 @@
-import { increaseTime, mineBlocks } from '../_utils/evm';
-import { printTitle } from '../_utils/formatting';
-import { shouldRevert } from '../_utils/testing';
+import { increaseTime, mineBlocks } from '../_utils/evm.js';
+import { printTitle } from '../_utils/formatting.js';
+import { shouldRevert } from '../_utils/testing.js';
 import {
     RocketDAONodeTrustedSettingsMinipool,
     RocketDAOProtocolSettingsAuction,
     RocketNodeStaking
-} from '../_utils/artifacts';
-import { auctionCreateLot, auctionPlaceBid, getLotStartBlock, getLotPriceAtBlock } from '../_helpers/auction';
-import { userDeposit } from '../_helpers/deposit';
-import { createMinipool, stakeMinipool } from '../_helpers/minipool';
-import { submitPrices } from '../_helpers/network';
-import { registerNode, setNodeTrusted, nodeStakeRPL } from '../_helpers/node';
-import { setDAOProtocolBootstrapSetting } from '../dao/scenario-dao-protocol-bootstrap';
-import { mintRPL } from '../_helpers/tokens';
-import { createLot } from './scenario-create-lot';
-import { placeBid } from './scenario-place-bid';
-import { claimBid } from './scenario-claim-bid';
-import { recoverUnclaimedRPL } from './scenario-recover-rpl';
-import { withdrawValidatorBalance } from '../minipool/scenario-withdraw-validator-balance'
-import { setDAONodeTrustedBootstrapSetting } from '../dao/scenario-dao-node-trusted-bootstrap';
-import { assertBN } from '../_helpers/bn';
+} from '../_utils/artifacts.js';
+import { auctionCreateLot, auctionPlaceBid, getLotStartBlock, getLotPriceAtBlock } from '../_helpers/auction.js';
+import { userDeposit } from '../_helpers/deposit.js';
+import { createMinipool, stakeMinipool } from '../_helpers/minipool.js';
+import { submitPrices } from '../_helpers/network.js';
+import { registerNode, setNodeTrusted, nodeStakeRPL } from '../_helpers/node.js';
+import { setDAOProtocolBootstrapSetting } from '../dao/scenario-dao-protocol-bootstrap.js';
+import { mintRPL } from '../_helpers/tokens.js';
+import { createLot } from './scenario-create-lot.js';
+import { placeBid } from './scenario-place-bid.js';
+import { claimBid } from './scenario-claim-bid.js';
+import { recoverUnclaimedRPL } from './scenario-recover-rpl.js';
+import { withdrawValidatorBalance } from '../minipool/scenario-withdraw-validator-balance.js'
+import { setDAONodeTrustedBootstrapSetting } from '../dao/scenario-dao-node-trusted-bootstrap.js';
+import { assertBN } from '../_helpers/bn.js';
 
 export default function() {
     contract('RocketAuctionManager', async (accounts) => {

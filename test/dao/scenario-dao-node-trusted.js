@@ -5,9 +5,9 @@ import {
     RocketDAOProposal,
     RocketTokenRPL,
     RocketVault,
-} from '../_utils/artifacts';
-import { proposalStates, getDAOProposalState } from './scenario-dao-proposal';
-import { assertBN } from '../_helpers/bn';
+} from '../_utils/artifacts.js';
+import { proposalStates, getDAOProposalState } from './scenario-dao-proposal.js';
+import { assertBN } from '../_helpers/bn.js';
 
 
 // Returns true if the address is a DAO member

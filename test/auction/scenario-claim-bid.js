@@ -1,5 +1,5 @@
-import { RocketAuctionManager, RocketTokenRPL, RocketVault } from '../_utils/artifacts';
-import { assertBN } from '../_helpers/bn';
+import { RocketAuctionManager, RocketTokenRPL, RocketVault } from '../_utils/artifacts.js';
+import { assertBN } from '../_helpers/bn.js';
 
 
 // Claim RPL from a lot

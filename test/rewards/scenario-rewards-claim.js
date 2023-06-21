@@ -1,4 +1,4 @@
-import { RocketDAOProtocolSettingsRewards, RocketRewardsPool } from '../_utils/artifacts';
+import { RocketDAOProtocolSettingsRewards, RocketRewardsPool } from '../_utils/artifacts.js';
 
 
 // Get the current rewards claim period in blocks

@@ -1,11 +1,11 @@
-import { getCurrentTime, increaseTime } from '../_utils/evm'
-import { printTitle } from '../_utils/formatting';
-import { shouldRevert } from '../_utils/testing';
-import { mintDummyRPL } from './scenario-rpl-mint-fixed';
-import { burnFixedRPL } from './scenario-rpl-burn-fixed';
-import { allowDummyRPL } from './scenario-rpl-allow-fixed';
-import { rplClaimInflation, rplSetInflationConfig } from './scenario-rpl-inflation'
-import { setRPLInflationIntervalRate, setRPLInflationStartTime } from '../dao/scenario-dao-protocol-bootstrap';
+import { getCurrentTime, increaseTime } from '../_utils/evm.js'
+import { printTitle } from '../_utils/formatting.js';
+import { shouldRevert } from '../_utils/testing.js';
+import { mintDummyRPL } from './scenario-rpl-mint-fixed.js';
+import { burnFixedRPL } from './scenario-rpl-burn-fixed.js';
+import { allowDummyRPL } from './scenario-rpl-allow-fixed.js';
+import { rplClaimInflation, rplSetInflationConfig } from './scenario-rpl-inflation.js'
+import { setRPLInflationIntervalRate, setRPLInflationStartTime } from '../dao/scenario-dao-protocol-bootstrap.js';
 
 // Contracts
 import { RocketTokenRPL } from '../_utils/artifacts';

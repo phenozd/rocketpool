@@ -4,7 +4,7 @@ import {
     RocketDAOProtocolSettingsMinipool,
     RocketVault,
     RocketDepositPool,
-} from '../_utils/artifacts';
+} from '../_utils/artifacts.js';
 
 
 // Assign deposits to minipools

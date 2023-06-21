@@ -1,4 +1,4 @@
-import { RocketNodeManager, RocketStorage } from '../_utils/artifacts'
+import { RocketNodeManager, RocketStorage } from '../_utils/artifacts.js'
 
 
 // Set a node's withdrawal address

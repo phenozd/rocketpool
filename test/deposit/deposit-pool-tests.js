@@ -1,20 +1,20 @@
-import { printTitle } from '../_utils/formatting';
-import { shouldRevert } from '../_utils/testing';
-import { userDeposit } from '../_helpers/deposit';
-import { createMinipool, getMinipoolMinimumRPLStake } from '../_helpers/minipool';
-import { submitBalances } from '../_helpers/network';
-import { registerNode, setNodeTrusted, nodeDeposit, nodeStakeRPL } from '../_helpers/node';
-import { getRethExchangeRate, getRethTotalSupply, mintRPL } from '../_helpers/tokens';
-import { getDepositSetting } from '../_helpers/settings';
-import { deposit } from './scenario-deposit';
+import { printTitle } from '../_utils/formatting.js';
+import { shouldRevert } from '../_utils/testing.js';
+import { userDeposit } from '../_helpers/deposit.js';
+import { createMinipool, getMinipoolMinimumRPLStake } from '../_helpers/minipool.js';
+import { submitBalances } from '../_helpers/network.js';
+import { registerNode, setNodeTrusted, nodeDeposit, nodeStakeRPL } from '../_helpers/node.js';
+import { getRethExchangeRate, getRethTotalSupply, mintRPL } from '../_helpers/tokens.js';
+import { getDepositSetting } from '../_helpers/settings.js';
+import { deposit } from './scenario-deposit.js';
 import {
     RocketDAONodeTrustedSettingsMembers,
     RocketDAOProtocolSettingsDeposit, RocketDepositPool,
-} from '../_utils/artifacts';
-import { setDAOProtocolBootstrapSetting } from '../dao/scenario-dao-protocol-bootstrap';
-import { setDAONodeTrustedBootstrapSetting } from '../dao/scenario-dao-node-trusted-bootstrap'
-import { assignDepositsV2 } from './scenario-assign-deposits-v2';
-import { assertBN } from '../_helpers/bn';
+} from '../_utils/artifacts.js';
+import { setDAOProtocolBootstrapSetting } from '../dao/scenario-dao-protocol-bootstrap.js';
+import { setDAONodeTrustedBootstrapSetting } from '../dao/scenario-dao-node-trusted-bootstrap.js'
+import { assignDepositsV2 } from './scenario-assign-deposits-v2.js';
+import { assertBN } from '../_helpers/bn.js';
 
 export default function() {
     contract('RocketDepositPool', async (accounts) => {

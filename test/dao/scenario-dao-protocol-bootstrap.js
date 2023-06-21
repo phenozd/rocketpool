@@ -1,6 +1,6 @@
 import Web3 from 'web3';
-import { RocketDAOProtocol, RocketDAOProtocolSettingsRewards, RocketDAOProtocolSettingsInflation, RocketTokenRPL, RocketVault } from '../_utils/artifacts';
-import { assertBN } from '../_helpers/bn';
+import { RocketDAOProtocol, RocketDAOProtocolSettingsRewards, RocketDAOProtocolSettingsInflation, RocketTokenRPL, RocketVault } from '../_utils/artifacts.js';
+import { assertBN } from '../_helpers/bn.js';
 
 
 // Change a trusted node DAO setting while bootstrap mode is enabled
